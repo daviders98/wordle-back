@@ -7,10 +7,10 @@ SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 CRON_SECRET = os.environ["CRON_SECRET"]
 WORDS_GENERATOR_URL = os.environ["WORDS_GENERATOR_URL"]
 
-def handler(request, response):
+def handler(request):
     token = request.headers.get("x-cron-secret")
     if token != CRON_SECRET:
-        return response.status(401).json({"error": "Unauthorized"})
+        return {"error": "Unauthorized"}, 401
 
     today = str(date.today())
 
@@ -25,7 +25,7 @@ def handler(request, response):
 
     existing = check_resp.json()
     if existing:
-        return response.json({"message": f"Solution already exists for today: {existing[0]['solution']}"})
+        return {"message": f"Solution already exists for today: {existing[0]['solution']}"}
 
     word = requests.get(WORDS_GENERATOR_URL).json()[0].upper()
 
@@ -43,4 +43,4 @@ def handler(request, response):
         }
     )
 
-    return response.json({"message": f"Word of the day ({today}) added: {word}", "status": insert_resp.status_code})
+    return {"message": f"Word of the day ({today}) added: {word}", "status": insert_resp.status_code}
