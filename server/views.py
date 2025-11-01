@@ -1,7 +1,7 @@
 from datetime import date
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from api.models import WordsHistory
+from server.models import WordsHistory
 import requests
 import os
 from dotenv import load_dotenv
