@@ -5,11 +5,15 @@ from api.models import WordsHistory
 import requests
 import os
 from dotenv import load_dotenv
+import jwt
+from datetime import datetime, timedelta, timezone
+from .decorators import jwt_required
 load_dotenv()
 
 DICTIONARY_API = os.environ.get("DICTIONARY_API")
 
 @api_view(['POST'])
+@jwt_required
 def check_guess(request):
     """
     Expects JSON: { "guess": "APPLE" }
@@ -26,6 +30,7 @@ def check_guess(request):
 
 
 @api_view(['POST'])
+@jwt_required
 def validate_word(request):
     """
     Expects JSON: { "word": "STEAM" }
@@ -48,3 +53,20 @@ def validate_word(request):
             is_valid = False
 
     return Response({"valid": is_valid}, status=200)
+
+JWT_SECRET = os.environ.get("JWT_SECRET")
+JWT_ALGORITHM = "HS256"
+JWT_EXP_DELTA_SECONDS = int(os.environ.get('JWT_EXP_DELTA_SECONDS'))
+
+@api_view(['POST'])
+def get_jwt(request):
+    """
+    Simple JWT generator.
+    Returns: { "token": "..." }
+    """
+    payload = {
+        "exp": datetime.now(timezone.utc) + timedelta(seconds=JWT_EXP_DELTA_SECONDS)
+    }
+
+    token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    return Response({"token": token})
