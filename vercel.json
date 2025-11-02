@@ -7,7 +7,6 @@
   ],
   "functions": {
     "api/generate_word.py": {
-      "runtime": "python3.11",
       "maxDuration": 10,
       "memory": 128
     }
