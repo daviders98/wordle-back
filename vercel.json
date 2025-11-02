@@ -2,7 +2,14 @@
   "crons": [
     {
       "path": "/api/generate_word",
-      "schedule": "*/5 * * * *"
+      "schedule": "0 22 * * *"
     }
-  ]
+  ],
+  "functions": {
+    "api/generate_word.py": {
+      "runtime": "python3.11",
+      "maxDuration": 10,
+      "memory": 128
+    }
+  }
 }

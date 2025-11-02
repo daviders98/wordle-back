@@ -52,7 +52,6 @@ class handler(BaseHTTPRequestHandler):
             json={
                 "solution": word,
                 "solution_date": today,
-                "created_at": today
             }
         )
 
