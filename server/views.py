@@ -9,6 +9,7 @@ import jwt
 from datetime import datetime, timedelta, timezone
 from .decorators import jwt_required
 load_dotenv()
+from django.http import JsonResponse
 
 DICTIONARY_API = os.environ.get("DICTIONARY_API")
 
@@ -70,3 +71,6 @@ def get_jwt(request):
 
     token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
     return Response({"token": token})
+
+def health_check(request):
+    return JsonResponse({"status": "ok"})
