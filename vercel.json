@@ -1,12 +1,13 @@
 {
   "crons": [
     {
-      "path": "/api/generate_word",
+      "path": "/api/trigger_generate_word",
       "schedule": "0 22 * * *"
     }
   ],
   "functions": {
     "api/generate_word.py": {
+      "runtime": "python3.11",
       "maxDuration": 10,
       "memory": 128
     }
