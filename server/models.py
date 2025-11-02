@@ -15,6 +15,7 @@ class WordsHistory(models.Model):
     solution_number = models.BigIntegerField()
 
     class Meta:
+        app_label = "server"
         managed = False
         db_table = 'words_history'
         db_table_comment = 'wordle solutions history'
