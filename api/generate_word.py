@@ -10,7 +10,7 @@ WORDS_GENERATOR_URL = os.environ["WORDS_GENERATOR_URL"]
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        # Check cron secret
+        print('Serverless function start')
         token = self.headers.get("x-cron-secret")
         if token != CRON_SECRET:
             self.send_response(401)
@@ -21,7 +21,6 @@ class handler(BaseHTTPRequestHandler):
 
         today = str(date.today())
 
-        # Check if word already exists
         check_resp = requests.get(
             f"{SUPABASE_URL}/rest/v1/words_history",
             headers={
@@ -41,10 +40,8 @@ class handler(BaseHTTPRequestHandler):
             )
             return
 
-        # Generate new word
         word = requests.get(WORDS_GENERATOR_URL).json()[0].upper()
 
-        # Insert word into Supabase
         insert_resp = requests.post(
             f"{SUPABASE_URL}/rest/v1/words_history",
             headers={
