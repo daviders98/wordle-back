@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/generate_word",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}
