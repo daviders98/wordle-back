@@ -1,6 +1,6 @@
 import os
 import requests
-from datetime import date
+from datetime import datetime, timedelta
 from http.server import BaseHTTPRequestHandler
 
 SUPABASE_URL = os.environ["SUPABASE_URL"]
@@ -19,26 +19,27 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(b'{"error": "Unauthorized"}')
             return
 
-        today = str(date.today())
-
-        check_resp = requests.get(
+        latest_resp = requests.get(
             f"{SUPABASE_URL}/rest/v1/words_history",
             headers={
                 "apikey": SUPABASE_KEY,
                 "Authorization": f"Bearer {SUPABASE_KEY}"
             },
-            params={"solution_date": f"eq.{today}"}
+            params={
+                "select": "*",
+                "order": "solution_date.desc",
+                "limit": 1
+            }
         )
 
-        existing = check_resp.json()
-        if existing:
-            self.send_response(200)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(
-                f'{{"message": "Solution already exists for today: {existing[0]["solution"]}"}}'.encode("utf-8")
-            )
-            return
+        latest_data = latest_resp.json()
+        if latest_data:
+            last_entry = latest_data[0]
+            next_date = (datetime.strptime(last_entry["solution_date"], "%Y-%m-%d") + timedelta(days=1)).date()
+            next_solution_number = last_entry.get("solution_number", 0) + 1
+        else:
+            next_date = datetime.today().date()
+            next_solution_number = 1
 
         word = requests.get(WORDS_GENERATOR_URL).json()[0].upper()
 
@@ -51,7 +52,8 @@ class handler(BaseHTTPRequestHandler):
             },
             json={
                 "solution": word,
-                "solution_date": today,
+                "solution_date": str(next_date),
+                "solution_number": next_solution_number
             }
         )
 
@@ -59,5 +61,5 @@ class handler(BaseHTTPRequestHandler):
         self.send_header("Content-type", "application/json")
         self.end_headers()
         self.wfile.write(
-            f'{{"message": "Word of the day ({today}) added: {word}", "status": {insert_resp.status_code}}}'.encode("utf-8")
+            f'{{"message": "Word added for {next_date}: {word}", "solution_number": {next_solution_number}, "status": {insert_resp.status_code}}}'.encode("utf-8")
         )

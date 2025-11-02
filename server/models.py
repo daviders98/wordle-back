@@ -10,13 +10,11 @@ from django.db import models
 class WordsHistory(models.Model):
     id = models.BigAutoField(primary_key=True)
     created_at = models.DateTimeField()
-    solution = models.CharField(max_length=10)
+    solution = models.TextField()
     solution_date = models.DateField()
+    solution_number = models.BigIntegerField()
 
     class Meta:
         managed = False
         db_table = 'words_history'
         db_table_comment = 'wordle solutions history'
-        
-    def __str__(self):
-        return f"{self.solution_date}: {self.solution}"
