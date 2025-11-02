@@ -1,17 +1,28 @@
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from server.models import WordsHistory
-import requests
-import os
-from dotenv import load_dotenv
-import jwt
-from datetime import datetime, timedelta, timezone
-from .decorators import jwt_required
-load_dotenv()
 from django.http import JsonResponse
+import os
+import requests
+import jwt
+from .decorators import jwt_required
+from dotenv import load_dotenv
 
+load_dotenv()
+
+SUPABASE_URL = os.environ["SUPABASE_URL"]
+SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 DICTIONARY_API = os.environ.get("DICTIONARY_API")
+
+JWT_SECRET = os.environ.get("JWT_SECRET")
+JWT_ALGORITHM = "HS256"
+JWT_EXP_DELTA_SECONDS = int(os.environ.get('JWT_EXP_DELTA_SECONDS', 3600))
+
+HEADERS = {
+    "apikey": SUPABASE_KEY,
+    "Authorization": f"Bearer {SUPABASE_KEY}",
+    "Content-Type": "application/json",
+}
 
 @api_view(['POST'])
 @jwt_required
@@ -22,13 +33,18 @@ def check_guess(request):
     """
     guess = request.data.get('guess', '').strip().upper()
 
-    today_word = WordsHistory.objects.filter(solution_date=date.today()).first()
-    if not today_word:
+    today = date.today().isoformat()
+    response = requests.get(
+        f"{SUPABASE_URL}/rest/v1/words_history",
+        headers=HEADERS,
+        params={"select": "solution", "solution_date": f"eq.{today}"}
+    )
+    data = response.json()
+    if not data:
         return Response({"error": "Today's word not found."}, status=404)
-
-    is_correct = guess == today_word.solution.upper()
+    today_word = data[0]["solution"].upper()
+    is_correct = guess == today_word
     return Response({"correct": is_correct}, status=200)
-
 
 @api_view(['POST'])
 @jwt_required
@@ -36,11 +52,17 @@ def validate_word(request):
     """
     Expects JSON: { "word": "STEAM" }
     Returns JSON: { "valid": true/false }
-    Word is valid if it's in the dictionary API OR in the generator history.
+    Word is valid if it's in the Supabase table word_history or the dictionary API.
     """
     word = request.data.get('word', '').strip().upper()
 
-    in_generator = WordsHistory.objects.filter(solution__iexact=word).exists()
+    response = requests.get(
+        f"{SUPABASE_URL}/rest/v1/words_history",
+        headers=HEADERS,
+        params={"select": "solution", "solution": f"eq.{word}"}
+    )
+    data = response.json()
+    in_generator = len(data) > 0
 
     is_valid = False
     if in_generator:
@@ -55,10 +77,6 @@ def validate_word(request):
 
     return Response({"valid": is_valid}, status=200)
 
-JWT_SECRET = os.environ.get("JWT_SECRET")
-JWT_ALGORITHM = "HS256"
-JWT_EXP_DELTA_SECONDS = int(os.environ.get('JWT_EXP_DELTA_SECONDS'))
-
 @api_view(['POST'])
 def get_jwt(request):
     """
@@ -68,7 +86,6 @@ def get_jwt(request):
     payload = {
         "exp": datetime.now(timezone.utc) + timedelta(seconds=JWT_EXP_DELTA_SECONDS)
     }
-
     token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
     return Response({"token": token})
 
