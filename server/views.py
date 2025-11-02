@@ -29,7 +29,10 @@ HEADERS = {
 def check_guess(request):
     """
     Expects JSON: { "guess": "APPLE" }
-    Returns JSON: { "correct": true/false }
+    Returns JSON: { "letters": [0,1,2,...] }
+    0 = not in word
+    1 = in word, wrong position
+    2 = correct position
     """
     guess = request.data.get('guess', '').strip().upper()
 
@@ -42,9 +45,24 @@ def check_guess(request):
     data = response.json()
     if not data:
         return Response({"error": "Today's word not found."}, status=404)
-    today_word = data[0]["solution"].upper()
-    is_correct = guess == today_word
-    return Response({"correct": is_correct}, status=200)
+
+    solution = data[0]["solution"].upper()
+    result = [0] * len(guess)
+    solution_letters_remaining = list(solution)
+    
+    # First pass: correct letters in correct position
+    for i in range(min(len(guess), len(solution))):
+        if guess[i] == solution[i]:
+            result[i] = 2
+            solution_letters_remaining[i] = None  # mark as used
+
+    # Second pass: correct letters in wrong position
+    for i in range(len(guess)):
+        if result[i] == 0 and guess[i] in solution_letters_remaining:
+            result[i] = 1
+            solution_letters_remaining[solution_letters_remaining.index(guess[i])] = None
+
+    return Response({"letters": result}, status=200)
 
 @api_view(['POST'])
 @jwt_required
