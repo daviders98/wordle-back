@@ -265,7 +265,17 @@
       {
         "message": "feat(WOP-13): Add changelog",
         "author": "David Garcia",
-        "date": "2025-11-04T19:58:40-07:00"
+        "date": "2025-11-04T19:58:46-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.2.7",
+    "commits": [
+      {
+        "message": "feat(WOP-13): Add CI/CD to move changelog file to front end app",
+        "author": "David Garcia",
+        "date": "2025-11-04T20:20:54-07:00"
       }
     ]
   }
