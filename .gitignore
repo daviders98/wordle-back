@@ -26,3 +26,4 @@ staticfiles/
 # Environment / secrets
 .env
 .vercel
+node_modules/

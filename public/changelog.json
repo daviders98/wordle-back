@@ -1,0 +1,272 @@
+[
+  {
+    "version": "v0.0.0",
+    "commits": [
+      {
+        "message": "Initial commit",
+        "author": "David García",
+        "date": "2025-10-27T21:08:26-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.0.1",
+    "commits": [
+      {
+        "message": "feat(WOP): Add basic configuration",
+        "author": "David Garcia",
+        "date": "2025-10-31T23:06:21-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.0.2",
+    "commits": [
+      {
+        "message": "feat(WOP-1): Add supabase connection, import model",
+        "author": "David Garcia",
+        "date": "2025-11-01T10:01:45-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.0.3",
+    "commits": [
+      {
+        "message": "feat(WOP-2): Add check word endpoint and serverless function",
+        "author": "David Garcia",
+        "date": "2025-11-01T12:04:36-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.0.4",
+    "commits": [
+      {
+        "message": "feat(WOP-3): Add word validator endpoint",
+        "author": "David Garcia",
+        "date": "2025-11-01T12:27:07-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.0.5",
+    "commits": [
+      {
+        "message": "feat(WOP-4): Add jwt decorator and jwt endpoint",
+        "author": "David Garcia",
+        "date": "2025-11-01T13:48:05-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.0.6",
+    "commits": [
+      {
+        "message": "feat(WOP-5): Add settings for vercel deployment",
+        "author": "David Garcia",
+        "date": "2025-11-01T14:15:16-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.0.7",
+    "commits": [
+      {
+        "message": "feat(WOP-5): Deploy only serverless",
+        "author": "David Garcia",
+        "date": "2025-11-01T15:16:29-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.0.8",
+    "commits": [
+      {
+        "message": "feat(WOP-6): Change directories for deployment",
+        "author": "David Garcia",
+        "date": "2025-11-01T16:01:23-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.0.9",
+    "commits": [
+      {
+        "message": "feat(WOP-6): Delete json config file",
+        "author": "David Garcia",
+        "date": "2025-11-01T16:06:37-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.0",
+    "commits": [
+      {
+        "message": "feat(WOP-6): Change serverless function",
+        "author": "David Garcia",
+        "date": "2025-11-01T16:41:56-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.1",
+    "commits": [
+      {
+        "message": "feat(WOP-6): Change serverless function to class, add vercel file",
+        "author": "David Garcia",
+        "date": "2025-11-01T17:36:51-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.2",
+    "commits": [
+      {
+        "message": "feat(WOP-6): Add test logs",
+        "author": "David Garcia",
+        "date": "2025-11-01T17:43:30-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.3",
+    "commits": [
+      {
+        "message": "feat(WOP-6): Change vercel.json",
+        "author": "David Garcia",
+        "date": "2025-11-01T18:03:00-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.4",
+    "commits": [
+      {
+        "message": "Delete version",
+        "author": "David Garcia",
+        "date": "2025-11-01T18:04:18-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.5",
+    "commits": [
+      {
+        "message": "feat(WOP-6): Added cron wrapper to include secret header",
+        "author": "David Garcia",
+        "date": "2025-11-01T18:17:31-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.6",
+    "commits": [
+      {
+        "message": "feat(WOP-6): Delete verison in json file",
+        "author": "David Garcia",
+        "date": "2025-11-01T18:18:20-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.7",
+    "commits": [
+      {
+        "message": "feat(WOP-7): Add solution_number field and be able to generate multiple words a day",
+        "author": "David Garcia",
+        "date": "2025-11-01T18:32:40-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.8",
+    "commits": [
+      {
+        "message": "feat(WOP-8): Add set up for render",
+        "author": "David Garcia",
+        "date": "2025-11-01T20:33:47-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.1.9",
+    "commits": [
+      {
+        "message": "feat(WOP-8): Add set up for render",
+        "author": "David Garcia",
+        "date": "2025-11-01T20:34:38-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.2.0",
+    "commits": [
+      {
+        "message": "feat(WOP-8): Add set up for render",
+        "author": "David Garcia",
+        "date": "2025-11-01T20:41:58-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.2.1",
+    "commits": [
+      {
+        "message": "feat(WOP-9): Add health check endpoint",
+        "author": "David Garcia",
+        "date": "2025-11-01T20:59:23-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.2.2",
+    "commits": [
+      {
+        "message": "feat(WOP-10): Add CORS allowed origins",
+        "author": "David Garcia",
+        "date": "2025-11-01T21:26:54-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.2.3",
+    "commits": [
+      {
+        "message": "fix(WOP-11): Fix DB connection",
+        "author": "David Garcia",
+        "date": "2025-11-01T23:38:05-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.2.4",
+    "commits": [
+      {
+        "message": "fix(WOP-11): Change DB connection and query to supabase",
+        "author": "David Garcia",
+        "date": "2025-11-02T08:43:29-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.2.5",
+    "commits": [
+      {
+        "message": "fix(WOP-12): Change solution logic",
+        "author": "David Garcia",
+        "date": "2025-11-02T09:16:55-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.2.6",
+    "commits": [
+      {
+        "message": "feat(WOP-13): Add changelog",
+        "author": "David Garcia",
+        "date": "2025-11-04T19:58:40-07:00"
+      }
+    ]
+  }
+]

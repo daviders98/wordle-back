@@ -1,0 +1,24 @@
+{
+  "name": "wordle-back",
+  "version": "1.0.0",
+  "description": "Back end for wordle game clone",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky",
+    "changelog": "python scripts/changelog.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daviders98/wordle-back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daviders98/wordle-back/issues"
+  },
+  "homepage": "https://github.com/daviders98/wordle-back#readme",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}

@@ -1,0 +1,21 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🪝 Running pre-push hook: Generating changelog..."
+npm run changelog
+
+if [ $? -ne 0 ]; then
+  echo "❌ Changelog generation failed. Aborting push."
+  exit 1
+fi
+
+if ! git diff --quiet public/changelog.json; then
+  echo "📄 Changelog updated — committing changes..."
+  git add public/changelog.json
+
+  git commit --amend --no-edit
+
+  echo "✅ Changelog committed. Continuing push..."
+else
+  echo "ℹ️ No changelog changes detected."
+fi
