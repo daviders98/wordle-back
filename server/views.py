@@ -49,7 +49,7 @@ def check_guess(request):
     solution = data[0]["solution"].upper()
     result = [0] * len(guess)
     solution_letters_remaining = list(solution)
-    
+
     # First pass: correct letters in correct position
     for i in range(min(len(guess), len(solution))):
         if guess[i] == solution[i]:
@@ -109,3 +109,46 @@ def get_jwt(request):
 
 def health_check(request):
     return JsonResponse({"status": "ok"})
+
+from datetime import date
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+import requests
+import os
+
+SUPABASE_URL = os.environ["SUPABASE_URL"]
+SUPABASE_KEY = os.environ["SUPABASE_KEY"]
+
+HEADERS = {
+    "apikey": SUPABASE_KEY,
+    "Authorization": f"Bearer {SUPABASE_KEY}",
+    "Content-Type": "application/json",
+}
+
+
+@api_view(["GET"])
+def list_words(request):
+    """
+    Returns all past words (before today).
+    Filters out today's and future words.
+    """
+    today = date.today().isoformat()
+
+    response = requests.get(
+        f"{SUPABASE_URL}/rest/v1/words_history",
+        headers=HEADERS,
+        params={
+            "select": "solution,solution_date,solution_number",
+            "solution_date": f"lt.{today}",
+            "order": "solution_date.desc"
+        },
+    )
+
+    if response.status_code != 200:
+        return Response(
+            {"error": "Failed to fetch words from Supabase"},
+            status=response.status_code,
+        )
+
+    data = response.json()
+    return Response(data, status=200)

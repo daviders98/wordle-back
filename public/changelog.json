@@ -275,7 +275,17 @@
       {
         "message": "feat(WOP-13): Add CI/CD to move changelog file to front end app",
         "author": "David Garcia",
-        "date": "2025-11-04T20:20:54-07:00"
+        "date": "2025-11-04T20:20:59-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.2.8",
+    "commits": [
+      {
+        "message": "feat(WOP-14): Add endpoint to get past words",
+        "author": "David Garcia",
+        "date": "2025-11-04T22:40:31-07:00"
       }
     ]
   }
