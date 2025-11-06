@@ -295,7 +295,17 @@
       {
         "message": "fix(WOP-15): Improve performance by reducing 2 API calls to 1",
         "author": "David Garcia",
-        "date": "2025-11-05T21:45:31-07:00"
+        "date": "2025-11-05T21:45:34-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.3.0",
+    "commits": [
+      {
+        "message": "fix(WOP-16): Add missing import",
+        "author": "David Garcia",
+        "date": "2025-11-05T21:49:44-07:00"
       }
     ]
   }
