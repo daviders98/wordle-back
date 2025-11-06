@@ -305,7 +305,17 @@
       {
         "message": "fix(WOP-16): Add missing import",
         "author": "David Garcia",
-        "date": "2025-11-05T21:49:44-07:00"
+        "date": "2025-11-05T21:49:50-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.3.1",
+    "commits": [
+      {
+        "message": "fix(WOP-17): Change url on new endpoint",
+        "author": "David Garcia",
+        "date": "2025-11-05T21:54:00-07:00"
       }
     ]
   }
