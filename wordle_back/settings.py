@@ -128,3 +128,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = os.environ.get("ALLOWED_CORS_ORIGINS", "").split(",")
 CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = os.environ.get("ALLOWED_CORS_ORIGINS", "").split(",")
+
+# Only secure cookies over HTTPS
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+
+# HTTP Strict Transport Security (forces HTTPS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Clickjacking protection
+X_FRAME_OPTIONS = "DENY"
+
+# Prevent referrer leaks
+SECURE_REFERRER_POLICY = "strict-origin"
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"

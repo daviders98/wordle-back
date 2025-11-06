@@ -315,7 +315,17 @@
       {
         "message": "fix(WOP-17): Change url on new endpoint",
         "author": "David Garcia",
-        "date": "2025-11-05T21:54:00-07:00"
+        "date": "2025-11-05T21:54:03-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.3.2",
+    "commits": [
+      {
+        "message": "feat(WOP-18): Increase server security, delete admin endpoint",
+        "author": "David Garcia",
+        "date": "2025-11-05T22:23:14-07:00"
       }
     ]
   }
