@@ -26,60 +26,22 @@ HEADERS = {
 
 @api_view(['POST'])
 @jwt_required
-def check_guess(request):
+def guess_word(request):
     """
-    Expects JSON: { "guess": "APPLE" }
-    Returns JSON: { "letters": [0,1,2,...] }
-    0 = not in word
-    1 = in word, wrong position
-    2 = correct position
+    Combined endpoint:
+    1.- Validates word against Supabase and dictionary API.
+    2.- If invalid: returns { valid: false }.
+    3.- If valid: compares with today's solution and returns { valid: true, letters: [...] }.
     """
     guess = request.data.get('guess', '').strip().upper()
 
-    today = date.today().isoformat()
-    response = requests.get(
+    # Step 1
+    validation_resp = requests.get(
         f"{SUPABASE_URL}/rest/v1/words_history",
         headers=HEADERS,
-        params={"select": "solution", "solution_date": f"eq.{today}"}
+        params={"select": "solution", "solution": f"eq.{guess}"}
     )
-    data = response.json()
-    if not data:
-        return Response({"error": "Today's word not found."}, status=404)
-
-    solution = data[0]["solution"].upper()
-    result = [0] * len(guess)
-    solution_letters_remaining = list(solution)
-
-    # First pass: correct letters in correct position
-    for i in range(min(len(guess), len(solution))):
-        if guess[i] == solution[i]:
-            result[i] = 2
-            solution_letters_remaining[i] = None  # mark as used
-
-    # Second pass: correct letters in wrong position
-    for i in range(len(guess)):
-        if result[i] == 0 and guess[i] in solution_letters_remaining:
-            result[i] = 1
-            solution_letters_remaining[solution_letters_remaining.index(guess[i])] = None
-
-    return Response({"letters": result}, status=200)
-
-@api_view(['POST'])
-@jwt_required
-def validate_word(request):
-    """
-    Expects JSON: { "word": "STEAM" }
-    Returns JSON: { "valid": true/false }
-    Word is valid if it's in the Supabase table word_history or the dictionary API.
-    """
-    word = request.data.get('word', '').strip().upper()
-
-    response = requests.get(
-        f"{SUPABASE_URL}/rest/v1/words_history",
-        headers=HEADERS,
-        params={"select": "solution", "solution": f"eq.{word}"}
-    )
-    data = response.json()
+    data = validation_resp.json()
     in_generator = len(data) > 0
 
     is_valid = False
@@ -87,20 +49,48 @@ def validate_word(request):
         is_valid = True
     else:
         try:
-            resp = requests.get(DICTIONARY_API + word.lower())
-            if resp.status_code == 200:
+            dict_resp = requests.get(DICTIONARY_API + guess.lower())
+            if dict_resp.status_code == 200:
                 is_valid = True
         except requests.RequestException:
             is_valid = False
 
-    return Response({"valid": is_valid}, status=200)
+    if not is_valid:
+        return Response({"valid": False}, status=200)
+
+    # Step 2
+    today = date.today().isoformat()
+    word_resp = requests.get(
+        f"{SUPABASE_URL}/rest/v1/words_history",
+        headers=HEADERS,
+        params={"select": "solution", "solution_date": f"eq.{today}"}
+    )
+    word_data = word_resp.json()
+
+    if not word_data:
+        return Response({"error": "Today's word not found."}, status=404)
+
+    solution = word_data[0]["solution"].upper()
+    result = [0] * len(guess)
+    solution_letters_remaining = list(solution)
+
+    # Step 3 First pass: correct position
+    for i in range(min(len(guess), len(solution))):
+        if guess[i] == solution[i]:
+            result[i] = 2
+            solution_letters_remaining[i] = None
+
+    # Step 3 Second pass: wrong position but in word
+    for i in range(len(guess)):
+        if result[i] == 0 and guess[i] in solution_letters_remaining:
+            result[i] = 1
+            solution_letters_remaining[solution_letters_remaining.index(guess[i])] = None
+
+    return Response({"valid": True, "letters": result}, status=200)
 
 @api_view(['POST'])
 def get_jwt(request):
-    """
-    Simple JWT generator.
-    Returns: { "token": "..." }
-    """
+    """Simple JWT generator"""
     payload = {
         "exp": datetime.now(timezone.utc) + timedelta(seconds=JWT_EXP_DELTA_SECONDS)
     }
@@ -110,28 +100,9 @@ def get_jwt(request):
 def health_check(request):
     return JsonResponse({"status": "ok"})
 
-from datetime import date
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-import requests
-import os
-
-SUPABASE_URL = os.environ["SUPABASE_URL"]
-SUPABASE_KEY = os.environ["SUPABASE_KEY"]
-
-HEADERS = {
-    "apikey": SUPABASE_KEY,
-    "Authorization": f"Bearer {SUPABASE_KEY}",
-    "Content-Type": "application/json",
-}
-
-
 @api_view(["GET"])
 def list_words(request):
-    """
-    Returns all past words (before today).
-    Filters out today's and future words.
-    """
+    """Returns all past words (before today)."""
     today = date.today().isoformat()
 
     response = requests.get(
@@ -150,5 +121,4 @@ def list_words(request):
             status=response.status_code,
         )
 
-    data = response.json()
-    return Response(data, status=200)
+    return Response(response.json(), status=200)
