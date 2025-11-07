@@ -325,7 +325,17 @@
       {
         "message": "feat(WOP-18): Increase server security, delete admin endpoint",
         "author": "David Garcia",
-        "date": "2025-11-05T22:23:14-07:00"
+        "date": "2025-11-05T22:23:18-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.3.3",
+    "commits": [
+      {
+        "message": "chore: Add readme",
+        "author": "David Garcia",
+        "date": "2025-11-06T21:29:56-07:00"
       }
     ]
   }
