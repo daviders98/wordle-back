@@ -345,7 +345,17 @@
       {
         "message": "feat(WOP-19): Increase server security",
         "author": "David Garcia",
-        "date": "2025-11-07T18:51:24-07:00"
+        "date": "2025-11-07T18:51:27-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.3.5",
+    "commits": [
+      {
+        "message": "fix(WOP-20): Add more guesses to rate limiter",
+        "author": "David Garcia",
+        "date": "2025-11-07T19:46:55-07:00"
       }
     ]
   }

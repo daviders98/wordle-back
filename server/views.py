@@ -27,7 +27,7 @@ HEADERS = {
 
 @api_view(['POST'])
 @jwt_required
-@ratelimit(key='ip', rate='5/m', block=True)
+@ratelimit(key='ip', rate='20/m', block=True)
 def guess_word(request):
     """
     Combined endpoint:
