@@ -355,7 +355,17 @@
       {
         "message": "fix(WOP-20): Add more guesses to rate limiter",
         "author": "David Garcia",
-        "date": "2025-11-07T19:46:55-07:00"
+        "date": "2025-11-07T19:47:11-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.3.6",
+    "commits": [
+      {
+        "message": "fix(WOP-21): Fix render deployment",
+        "author": "David Garcia",
+        "date": "2025-11-07T20:44:33-07:00"
       }
     ]
   }
