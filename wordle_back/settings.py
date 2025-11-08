@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'server.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'wordle_back.urls'
@@ -145,5 +146,7 @@ X_FRAME_OPTIONS = "DENY"
 
 # Prevent referrer leaks
 SECURE_REFERRER_POLICY = "strict-origin"
+# Prevent browsers from guessing file types
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"

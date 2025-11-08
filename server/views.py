@@ -7,6 +7,7 @@ import requests
 import jwt
 from .decorators import jwt_required
 from dotenv import load_dotenv
+from django_ratelimit.decorators import ratelimit
 
 load_dotenv()
 
@@ -26,6 +27,7 @@ HEADERS = {
 
 @api_view(['POST'])
 @jwt_required
+@ratelimit(key='ip', rate='5/m', block=True)
 def guess_word(request):
     """
     Combined endpoint:
@@ -34,7 +36,8 @@ def guess_word(request):
     3.- If valid: compares with today's solution and returns { valid: true, letters: [...] }.
     """
     guess = request.data.get('guess', '').strip().upper()
-
+    if len(guess) != 5 or not guess.isalpha():
+        return Response({"valid": False, "error": "Invalid word length or characters."}, status=400)
     # Step 1
     validation_resp = requests.get(
         f"{SUPABASE_URL}/rest/v1/words_history",
