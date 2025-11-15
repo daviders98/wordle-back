@@ -5,10 +5,12 @@ class CSPMiddleware(MiddlewareMixin):
         response["Content-Security-Policy"] = (
             "default-src 'self'; "
             "script-src 'self'; "
-            "style-src 'self' 'unsafe-inline'; "
+            "style-src 'self'; "
             "img-src 'self' data:; "
-            "font-src 'self'; "
-            "connect-src 'self'; "
+            "connect-src 'self' https://devgarcia.vercel.app; "
+            "object-src 'none'; "
             "frame-ancestors 'none'; "
+            "base-uri 'self'; "
+            "form-action 'self'; "
         )
         return response

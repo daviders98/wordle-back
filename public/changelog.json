@@ -365,7 +365,17 @@
       {
         "message": "fix(WOP-21): Fix render deployment",
         "author": "David Garcia",
-        "date": "2025-11-07T20:44:33-07:00"
+        "date": "2025-11-07T20:47:57-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.3.7",
+    "commits": [
+      {
+        "message": "fix(WOP-22): Change CSP",
+        "author": "David Garcia",
+        "date": "2025-11-15T12:17:18-07:00"
       }
     ]
   }
