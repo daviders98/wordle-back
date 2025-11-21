@@ -385,7 +385,17 @@
       {
         "message": "feat(WOP-23): Add 404",
         "author": "David Garcia",
-        "date": "2025-11-15T12:25:03-07:00"
+        "date": "2025-11-15T12:25:06-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.3.9",
+    "commits": [
+      {
+        "message": "fix(WOP-24): Add self-hosted list of words",
+        "author": "David Garcia",
+        "date": "2025-11-21T12:04:57-07:00"
       }
     ]
   }

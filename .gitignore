@@ -27,3 +27,4 @@ staticfiles/
 .env
 .vercel
 node_modules/
+wordle_back/words.json
