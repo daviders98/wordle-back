@@ -395,7 +395,17 @@
       {
         "message": "fix(WOP-24): Add self-hosted list of words",
         "author": "David Garcia",
-        "date": "2025-11-21T12:04:57-07:00"
+        "date": "2025-11-21T12:05:00-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.4.0",
+    "commits": [
+      {
+        "message": "fix(WOP-25): Update README.md",
+        "author": "David Garcia",
+        "date": "2025-11-22T15:08:53-07:00"
       }
     ]
   }
