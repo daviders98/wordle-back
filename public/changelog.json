@@ -435,7 +435,17 @@
       {
         "message": "feat(WOP-28): Add solution number and definition to words history",
         "author": "David Garcia",
-        "date": "2025-12-24T11:44:19-07:00"
+        "date": "2025-12-24T11:44:22-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.4.4",
+    "commits": [
+      {
+        "message": "feat(WOP-29): Add definition to solution of the day",
+        "author": "David Garcia",
+        "date": "2025-12-24T14:25:09-07:00"
       }
     ]
   }

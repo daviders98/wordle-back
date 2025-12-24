@@ -171,3 +171,41 @@ def list_words(request):
         },
         status=200,
     )
+
+@api_view(["GET"])
+@jwt_required
+@ratelimit(key="ip", rate="3/m", block=True)
+def get_today_word_meaning(request):
+    today = datetime.now(timezone.utc).date().isoformat()
+
+    resp = requests.get(
+        f"{SUPABASE_URL}/rest/v1/words_history",
+        headers=HEADERS,
+        params={
+            "select": "solution,meaning,solution_number",
+            "solution_date": f"eq.{today}",
+            "limit": 1,
+        },
+    )
+
+    if resp.status_code != 200:
+        return Response(
+            {"error": "Failed to fetch today's word"},
+            status=resp.status_code,
+        )
+
+    data = resp.json()
+    if not data:
+        return Response(
+            {"error": "Today's word not found"},
+            status=404,
+        )
+
+    return Response(
+        {
+            "solution": data[0]["solution"],
+            "meaning": data[0]["meaning"],
+            "solution_number": data[0]["solution_number"],
+        },
+        status=200,
+    )
