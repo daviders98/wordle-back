@@ -49,8 +49,38 @@ class handler(BaseHTTPRequestHandler):
             return
 
         words = load_words()
-        entry = random.choice(words)
 
+        one_year_ago = (datetime.today() - timedelta(days=366)).date().isoformat()
+        past_resp = requests.get(
+            f"{SUPABASE_URL}/rest/v1/words_history",
+            headers={
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}"
+            },
+            params={
+                "select": "solution",
+                "solution_date": f"gte.{one_year_ago}"
+            }
+        )
+
+        if past_resp.status_code != 200:
+            self.send_response(500)
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"error": "Failed to fetch recent words"}')
+            return
+
+        recent_words = {entry["solution"].upper() for entry in past_resp.json()}
+
+        candidates = [w for w in words if w["word"].upper() not in recent_words]
+        if not candidates:
+            self.send_response(400)
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"error": "No available words left that satisfy the 1-year rule"}')
+            return
+
+        entry = random.choice(candidates)
         word = entry["word"].upper()
         meaning = entry["meaning"]
 
