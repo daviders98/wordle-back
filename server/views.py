@@ -102,19 +102,24 @@ def get_jwt(request):
 
 def health_check(request):
     return JsonResponse({"status": "ok"})
-
 @api_view(["GET"])
+@ratelimit(key="ip", rate="20/m", block=True)
 def list_words(request):
-    """Returns all past words (before today)."""
-    today = date.today().isoformat()
+    today = datetime.now(timezone.utc).date().isoformat()
+
+    page = int(request.query_params.get("page", 1))
+    per_page = int(request.query_params.get("per_page", 50))
+    offset = (page - 1) * per_page
 
     response = requests.get(
         f"{SUPABASE_URL}/rest/v1/words_history",
         headers=HEADERS,
         params={
-            "select": "solution,solution_date,solution_number",
+            "select": "solution,solution_date,solution_number,meaning",
             "solution_date": f"lt.{today}",
-            "order": "solution_date.desc"
+            "order": "solution_date.desc",
+            "limit": per_page,
+            "offset": offset,
         },
     )
 
@@ -124,4 +129,45 @@ def list_words(request):
             status=response.status_code,
         )
 
-    return Response(response.json(), status=200)
+    headers_with_count = HEADERS.copy()
+    headers_with_count["Prefer"] = "count=exact"
+
+    total_count_resp = requests.get(
+        f"{SUPABASE_URL}/rest/v1/words_history",
+        headers=headers_with_count,
+        params={
+            "select": "solution",
+            "solution_date": f"lt.{today}",
+            "limit": 1,
+        },
+    )
+
+    total_count = total_count_resp.headers.get("Content-Range")
+    total_count = int(total_count.split("/")[-1]) if total_count else None
+
+    latest_resp = requests.get(
+        f"{SUPABASE_URL}/rest/v1/words_history",
+        headers=HEADERS,
+        params={
+            "select": "solution_number",
+            "solution_date": f"eq.{today}",
+            "limit": 1,
+        },
+    )
+
+    latest_solution_number = None
+    if latest_resp.status_code == 200:
+        latest_data = latest_resp.json()
+        if latest_data:
+            latest_solution_number = latest_data[0]["solution_number"]
+
+    return Response(
+        {
+            "page": page,
+            "per_page": per_page,
+            "total": total_count,
+            "latest_solution_number": latest_solution_number,
+            "words": response.json(),
+        },
+        status=200,
+    )

@@ -425,7 +425,17 @@
       {
         "message": "feat(WOP-27): Prevent word from repeating within a year",
         "author": "David Garcia",
-        "date": "2025-12-23T21:55:57-07:00"
+        "date": "2025-12-23T21:56:06-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.4.3",
+    "commits": [
+      {
+        "message": "feat(WOP-28): Add solution number and definition to words history",
+        "author": "David Garcia",
+        "date": "2025-12-24T11:44:19-07:00"
       }
     ]
   }
