@@ -28,3 +28,4 @@ staticfiles/
 .vercel
 node_modules/
 wordle_back/words.json
+wordle_back/words_with_meanings.json

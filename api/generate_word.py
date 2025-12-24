@@ -19,20 +19,22 @@ ENCRYPTED_FILE = "wordle_back/words_encrypted.bin"
 
 
 def load_words():
-    """Decrypt and return the word list."""
+    """Decrypt and return the word objects."""
     with open(ENCRYPTED_FILE, "rb") as f:
         encrypted = f.read()
 
     cipher = Cipher(algorithms.AES(AES_KEY), modes.CBC(AES_IV))
     decryptor = cipher.decryptor()
-    decrypted = decryptor.update(encrypted) + decryptor.finalize()
+    padded = decryptor.update(encrypted) + decryptor.finalize()
 
     # Strip PKCS7 padding
-    pad_len = decrypted[-1]
-    decrypted = decrypted[:-pad_len]
+    pad_len = padded[-1]
+    decrypted = padded[:-pad_len]
 
-    return json.loads(decrypted.decode("utf-8"))
+    data = json.loads(decrypted.decode("utf-8"))
 
+    # Expect: [{ "word": "...", "meaning": "..." }, ...]
+    return data
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -47,7 +49,11 @@ class handler(BaseHTTPRequestHandler):
             return
 
         words = load_words()
-        word = random.choice(words).upper()
+        entry = random.choice(words)
+
+        word = entry["word"].upper()
+        meaning = entry["meaning"]
+
         latest_resp = requests.get(
             f"{SUPABASE_URL}/rest/v1/words_history",
             headers={
@@ -64,7 +70,10 @@ class handler(BaseHTTPRequestHandler):
         latest_data = latest_resp.json()
         if latest_data:
             last_entry = latest_data[0]
-            next_date = (datetime.strptime(last_entry["solution_date"], "%Y-%m-%d") + timedelta(days=1)).date()
+            next_date = (
+                datetime.strptime(last_entry["solution_date"], "%Y-%m-%d")
+                + timedelta(days=1)
+            ).date()
             next_solution_number = last_entry.get("solution_number", 0) + 1
         else:
             next_date = datetime.today().date()
@@ -79,6 +88,7 @@ class handler(BaseHTTPRequestHandler):
             },
             json={
                 "solution": word,
+                "meaning": meaning,
                 "solution_date": str(next_date),
                 "solution_number": next_solution_number
             }
@@ -88,5 +98,9 @@ class handler(BaseHTTPRequestHandler):
         self.send_header("Content-type", "application/json")
         self.end_headers()
         self.wfile.write(
-            f'{{"message": "Word added for {next_date}: {word}", "solution_number": {next_solution_number}, "status": {insert_resp.status_code}}}'.encode()
+            json.dumps({
+                "message": f"Word added for {next_date}: {word}",
+                "solution_number": next_solution_number,
+                "status": insert_resp.status_code
+            }).encode()
         )

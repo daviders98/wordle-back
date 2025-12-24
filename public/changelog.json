@@ -405,7 +405,17 @@
       {
         "message": "fix(WOP-25): Update README.md",
         "author": "David Garcia",
-        "date": "2025-11-22T15:08:53-07:00"
+        "date": "2025-11-22T15:09:13-07:00"
+      }
+    ]
+  },
+  {
+    "version": "v0.4.1",
+    "commits": [
+      {
+        "message": "feat(WOP-26): Add word meanings when generating word of the day",
+        "author": "David Garcia",
+        "date": "2025-12-23T21:27:42-07:00"
       }
     ]
   }
